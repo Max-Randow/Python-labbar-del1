@@ -10,7 +10,7 @@ def cvimg_to_list2(img):
 
     for y in range(height):
         for x in range(width):
-            out_list.append(tuple(img[y,x])
+            out_list.append(tuple(img[y,x]))
     
     return out_list
 
@@ -19,7 +19,7 @@ def cvimg_to_list2(img):
 
 def unsharp_mask(n):
     s = 4.5
-    start_index = 0 - n//2
+    start_index = -n//2
     mask_kernel = [[calc(start_index+x,start_index + y,s) if (start_index+x,start_index+y) != (0,0) else 1.5 for x in range(n)] for y in range(n)]
     
     return mask_kernel
@@ -29,4 +29,8 @@ def calc(x,y,s):
     return retVal
 
 
-
+img = cv2.imread('image.png')
+kernel = numpy.array(unsharp_mask(11))
+filtered_img = cv2.filter2D(img, -1, kernel)    
+cv2.imshow("filtered", filtered_img)
+cv2.waitKey(0)
