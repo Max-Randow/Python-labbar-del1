@@ -1,1 +1,11 @@
-	
+pixel_identifier
+En pixel representeras med heltal. Om våran pixel inte är ett heltal har vi skickat in fel värde
+
+color_of_pixel
+Om givet index för en pixel inte exsister så är vi utanför bild dimensionerna
+
+Combine_images_2
+om det inte går att göra condition(pixel) så är värdet på pixel fel, kasta ett ValueError
+
+
+om gen1(i) eller gen2(i) inte går igenom kastas ett index error från color_of_pixel, fånga det kasta ett nytt ValueError eftersom användaren har skickat in fel värde
