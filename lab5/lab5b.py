@@ -5,13 +5,26 @@ from lab5a import cvimg_to_list
 import random
 
 def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
+    """ 
+    returns a function which given  a pixel determens if given pixel is within a certian hsv value
+    """
     def pixel_identifier(pixel):
+        try:
+            """ 
+            If the input is not a number, a value error has ouccured
+            """
+            (h,s,v) = pixel
+            int(pixel[0])
+            int(pixel[1])
+            int(pixel[2])
+        except ValueError:
+            raise ValueError
+        
         (h,s,v) = pixel
         if hlow <= h <= hhigh and slow <= s <= shigh and vlow <= v <= vhigh:
             return 1
         else:   
             return 0
-
 
     return pixel_identifier
 
@@ -20,11 +33,16 @@ def generator_from_image(img: list):
     """
     Returns a function which returns the color of a specific pixel given an index
     """
-    
     def color_of_pixel(index: int) -> tuple:
         pixels = img
-        return pixels[index]
-
+        try:
+            """ 
+            Checks if index is in range, otherwise pixel does not exsist
+            """
+            return pixels[index]
+        except IndexError:
+            raise IndexError
+        
     return color_of_pixel
 
 # Skapa en generator som gör en stjärnhimmel
@@ -33,7 +51,9 @@ def generator1(index):
     return (val, val, val)
 
 def combine_images(img, condition, gen1, gen2):
-    
+    """ 
+    combines two images given a condition
+    """
 
     #Make list of 1 and 0, if 1 pixel is part of sky, if 0 pixel is not part of sky
     is_sky_pixels = [condition(pixel) for pixel in img]  
@@ -56,19 +76,35 @@ def gradient_condition(color):
 
 
 
-def combine_images_2(grad, grad_condition, gen1, gen2):
-    #pixel_from_img_1*condition + pixel_from_img_2*(1 - condition)
-    gradient_condition_list = [grad_condition(pixel) for pixel in grad]
+def combine_images_2(img, condition, gen1, gen2):
+    """ 
+    combines two images with a condition (ex gradient) 
+    """
+    try:
+        """ 
+        Condition will raise ValueError if failure occurs, catch this and raise another one since a value error has occured
+        """
+        condition_list = [condition(pixel) for pixel in img]
+    except ValueError:
+        raise ValueError("Expected number")
+
     out_list = list()
-    for i, value in enumerate(gradient_condition_list):
-        
-        first_pixel =  multiply_tuple(gen1(i), value)
-        second_pixel = multiply_tuple(gen2(i), (1 - value))
-        new_pixel = add_tuples(first_pixel,second_pixel)
-        out_list.append(new_pixel)
+    for i, value in enumerate(condition_list):
+        try:
+            """ 
+            Checks if generator 1 and 2 has a pixel for given index. Gen1 or Gen2 will throw an indexError, catch it and throw a ValueError
+            """
+            gen1(i)
+            gen2(i)
+            first_pixel =  multiply_tuple( gen1(i), value)
+            second_pixel = multiply_tuple( gen2(i), (1 - value))
+            new_pixel = add_tuples(first_pixel,second_pixel)
+            out_list.append(new_pixel)
+        except IndexError:
+            raise ValueError
 
     return out_list
-"""
+
 plane_img = cv2.imread("plane.jpg")
 flower_img = cv2.imread("flowers.jpg")
 gradient_img = cv2.imread("gradient.jpg")
@@ -88,4 +124,4 @@ result = combine_images_2(gradient_img_list, gradient_condition, generator1, gen
 new_img = rgblist_to_cvimg(result, plane_img.shape[0], plane_img.shape[1])
 cv2.imshow('Final image', new_img)
 cv2.waitKey(0)
-"""
+
