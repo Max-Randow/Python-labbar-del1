@@ -21,10 +21,13 @@ def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
             raise ValueError
         
         (h,s,v) = pixel
-        if hlow <= h <= hhigh and slow <= s <= shigh and vlow <= v <= vhigh:
-            return 1
-        else:   
-            return 0
+        try:
+            if hlow <= h <= hhigh and slow <= s <= shigh and vlow <= v <= vhigh:
+                return 1
+            else:   
+                return 0
+        except TypeError:
+            raise ValueError
 
     return pixel_identifier
 
@@ -105,23 +108,23 @@ def combine_images_2(img, condition, gen1, gen2):
 
     return out_list
 
-plane_img = cv2.imread("plane.jpg")
-flower_img = cv2.imread("flowers.jpg")
-gradient_img = cv2.imread("gradient.jpg")
+#plane_img = cv2.imread("plane.jpg")
+#flower_img = cv2.imread("flowers.jpg")
+#gradient_img = cv2.imread("gradient.jpg")
 
-gradient_img_list = cvimg_to_list(gradient_img)
-plane_img_list = cvimg_to_list(plane_img)
-flower_img_list = cvimg_to_list(flower_img)
-
-
+#gradient_img_list = cvimg_to_list(gradient_img)
+#plane_img_list = cvimg_to_list(plane_img)
+#flower_img_list = cvimg_to_list(flower_img)
 
 
-generator1 = generator_from_image(plane_img_list)
-generator2 = generator_from_image(flower_img_list)
 
-result = combine_images_2(gradient_img_list, gradient_condition, generator1, generator2)
 
-new_img = rgblist_to_cvimg(result, plane_img.shape[0], plane_img.shape[1])
-cv2.imshow('Final image', new_img)
-cv2.waitKey(0)
+#generator1 = generator_from_image(plane_img_list)
+#generator2 = generator_from_image(flower_img_list)
+
+#result = combine_images_2(gradient_img_list, gradient_condition, generator1, generator2)
+
+#new_img = rgblist_to_cvimg(result, plane_img.shape[0], plane_img.shape[1])
+#cv2.imshow('Final image', new_img)
+#cv2.waitKey(0)
 

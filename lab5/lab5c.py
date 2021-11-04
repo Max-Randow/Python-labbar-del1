@@ -49,8 +49,50 @@ def test_combine_images():
     assert third_image == gen_2_pixels
     print("Test passed")
 
+def test_pixel_constraint_expections():
+
+    try:
+        
+        test_data = [(255,255,0),(255,255,0),(0,0,255)]
+        condition = lab5b.pixel_constraint(200,"a",200,255,0,200)
+               
+        condition_pixels = [condition(pixel) for pixel in test_data]
+    except ValueError:
+        print("Corrext Exception caught")
+
+def test_generator_from_images_exceptions():
+    
+    test_data = [(255,255,0),(255,255,0),(0,0,255)]
+    generator = lab5b.generator_from_image(test_data)
+    try:
+        generator(3)
+    except IndexError:
+        print("Corrext Exception caught")
+
+def test_combine_images_exceptions():
+    
+    cond_1 = lambda x:  0.5
+    grad = [(128,128,128),(128,128,128),(128,128)]
+    gen_1_pixels = [(128,68,4),(10,12,148)]
+    gen_2_pixels = [(80,200,100),(128,128,128),(40,54,88)]
+    gen1 = lab5b.generator_from_image(gen_1_pixels)
+    gen2 = lab5b.generator_from_image(gen_2_pixels)
+    try:
+
+        first_image= lab5b.combine_images_2(grad, cond_1, gen1,gen2) 
+    except ValueError:
+        try:
+
+            cond_1 = lambda x: 0.5
+
+            grad = [(128,128,128),(128,128,128),(128,128)]
+            gen_1_pixels = [(128,68,4),(10,12,148)]
+            gen_2_pixels = [(80,200,100),(128,128,128),(40,54,88)]
+            gen1 = lab5b.generator_from_image(gen_1_pixels)
+            gen2 = lab5b.generator_from_image(gen_2_pixels)
+            first_image= lab5b.combine_images_2(grad, cond_1, gen1,gen2)
+        except ValueError:
+            print("Correct Exception caught")
 
 
-test_pixel_constraint()
-test_generator_from_image()
-test_combine_images()
+
